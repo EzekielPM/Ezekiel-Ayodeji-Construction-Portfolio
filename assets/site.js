@@ -87,11 +87,14 @@
   contactSummary.addEventListener('pointerup',endContactDrag);
   contactSummary.addEventListener('pointercancel',endContactDrag);
 
-  contactSummary.addEventListener('click',e=>{
+    contactSummary.addEventListener('click',e=>{
     if(contactWasDragged){
       e.preventDefault();
       contactWasDragged=false;
-    }   const footerInfo=document.querySelector('.footer-grid > div');
+    }
+  });
+
+  const footerInfo=document.querySelector('.footer-grid > div');
 
   if(footerInfo){
     const backToTop=document.createElement('a');
@@ -107,7 +110,6 @@
 
     footerInfo.appendChild(backToTop);
   }
-  });
   const modal=document.querySelector('.modal');
   if(modal){
     const modalImg=modal.querySelector('img');
