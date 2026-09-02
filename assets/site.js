@@ -109,6 +109,26 @@
     });
 
     footerInfo.appendChild(backToTop);
+  }   const headerNav=document.querySelector('.navlinks');
+
+  if(headerNav&&!headerNav.querySelector('.header-contact')){
+    const headerContact=document.createElement('a');
+    headerContact.className='pill primary nav-keep header-contact';
+    headerContact.href='/#contact';
+    headerContact.textContent="Let's talk";
+    headerContact.setAttribute('aria-label','Go to contact section');
+
+    headerContact.addEventListener('click',e=>{
+      const contactSection=document.querySelector('#contact');
+
+      if(contactSection){
+        e.preventDefault();
+        const contactTop=contactSection.getBoundingClientRect().top+window.scrollY-76;
+        window.scrollTo({top:contactTop,behavior:'smooth'});
+      }
+    });
+
+    headerNav.appendChild(headerContact);
   }
   const modal=document.querySelector('.modal');
   if(modal){
