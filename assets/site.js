@@ -91,7 +91,22 @@
     if(contactWasDragged){
       e.preventDefault();
       contactWasDragged=false;
-    }
+    }   const footerInfo=document.querySelector('.footer-grid > div');
+
+  if(footerInfo){
+    const backToTop=document.createElement('a');
+    backToTop.className='pill back-to-top';
+    backToTop.href='#';
+    backToTop.textContent='Back to top ↑';
+    backToTop.setAttribute('aria-label','Back to top');
+
+    backToTop.addEventListener('click',e=>{
+      e.preventDefault();
+      window.scrollTo({top:0,behavior:'smooth'});
+    });
+
+    footerInfo.appendChild(backToTop);
+  }
   });
   const modal=document.querySelector('.modal');
   if(modal){
