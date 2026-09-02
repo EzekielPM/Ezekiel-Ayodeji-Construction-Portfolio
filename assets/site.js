@@ -36,7 +36,63 @@
   document.addEventListener('click',e=>{
     if(contactDetails.open&&!contactFloater.contains(e.target)) contactDetails.open=false;
   });
-  
+    let dragStartX=0,dragStartY=0,floaterStartLeft=0,floaterStartTop=0;
+  let contactDragging=false,contactWasDragged=false;
+
+  contactSummary.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    const rect=contactSummary.getBoundingClientRect();
+    dragStartX=e.clientX;
+    dragStartY=e.clientY;
+    floaterStartLeft=rect.left;
+    floaterStartTop=rect.top;
+    contactDragging=true;
+    contactWasDragged=false;
+    contactSummary.style.cursor='grabbing';
+    contactSummary.setPointerCapture(e.pointerId);
+  });
+
+  contactSummary.addEventListener('pointermove',e=>{
+    if(!contactDragging)return;
+
+    const deltaX=e.clientX-dragStartX;
+    const deltaY=e.clientY-dragStartY;
+
+    if(!contactWasDragged&&Math.hypot(deltaX,deltaY)>5){
+      contactWasDragged=true;
+      contactDetails.open=false;
+    }
+
+    if(!contactWasDragged)return;
+
+    const maxLeft=window.innerWidth-contactSummary.offsetWidth-8;
+    const maxTop=window.innerHeight-contactSummary.offsetHeight-8;
+
+    contactFloater.style.right='auto';
+    contactFloater.style.bottom='auto';
+    contactFloater.style.left=`${Math.max(8,Math.min(maxLeft,floaterStartLeft+deltaX))}px`;
+    contactFloater.style.top=`${Math.max(8,Math.min(maxTop,floaterStartTop+deltaY))}px`;
+  });
+
+  const endContactDrag=e=>{
+    if(!contactDragging)return;
+    contactDragging=false;
+    contactSummary.style.cursor='grab';
+
+    if(contactSummary.hasPointerCapture(e.pointerId)){
+      contactSummary.releasePointerCapture(e.pointerId);
+    }
+  };
+
+  contactSummary.addEventListener('pointerup',endContactDrag);
+  contactSummary.addEventListener('pointercancel',endContactDrag);
+
+  contactSummary.addEventListener('click',e=>{
+    if(contactWasDragged){
+      e.preventDefault();
+      contactWasDragged=false;
+    }
+  });
   const modal=document.querySelector('.modal');
   if(modal){
     const modalImg=modal.querySelector('img');
