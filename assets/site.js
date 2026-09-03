@@ -139,6 +139,62 @@
 
     headerNav.appendChild(headerContact);
   }
+
+  if(headerNav&&!headerNav.querySelector('.mobile-menu-toggle')){
+    const navContainer=headerNav.closest('.nav');
+    const menuButton=document.createElement('button');
+    const menuPanel=document.createElement('nav');
+
+    menuButton.type='button';
+    menuButton.className='mobile-menu-toggle';
+    menuButton.textContent='Menu';
+    menuButton.setAttribute('aria-expanded','false');
+    menuButton.setAttribute('aria-controls','mobile-site-menu');
+
+    menuPanel.id='mobile-site-menu';
+    menuPanel.className='mobile-menu-panel';
+    menuPanel.setAttribute('aria-label','Mobile navigation');
+    menuPanel.hidden=true;
+
+    headerNav.querySelectorAll('a:not(.header-contact)').forEach(link=>{
+      menuPanel.appendChild(link.cloneNode(true));
+    });
+
+    const menuContact=document.createElement('a');
+    menuContact.href='/#contact';
+    menuContact.textContent='Contact';
+    menuPanel.appendChild(menuContact);
+
+    const closeMenu=()=>{
+      menuPanel.hidden=true;
+      menuButton.textContent='Menu';
+      menuButton.setAttribute('aria-expanded','false');
+    };
+
+    menuButton.addEventListener('click',()=>{
+      const opening=menuPanel.hidden;
+      menuPanel.hidden=!opening;
+      menuButton.textContent=opening?'Close':'Menu';
+      menuButton.setAttribute('aria-expanded',String(opening));
+    });
+
+    menuPanel.addEventListener('click',closeMenu);
+    document.addEventListener('click',event=>{
+      if(!menuPanel.hidden&&!navContainer.contains(event.target)) closeMenu();
+    });
+    document.addEventListener('keydown',event=>{
+      if(event.key==='Escape'&&!menuPanel.hidden){
+        closeMenu();
+        menuButton.focus();
+      }
+    });
+    window.addEventListener('resize',()=>{
+      if(window.innerWidth>760) closeMenu();
+    });
+
+    headerNav.appendChild(menuButton);
+    navContainer.appendChild(menuPanel);
+  }
   const modal=document.querySelector('.modal');
   if(modal){
     const modalImg=modal.querySelector('img');
