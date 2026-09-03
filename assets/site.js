@@ -93,7 +93,16 @@
       contactWasDragged=false;
     }
   });
+  const siteFooter=document.querySelector('.footer');
 
+  if(siteFooter){
+    const footerObserver=new IntersectionObserver(([entry])=>{
+      contactFloater.classList.toggle('footer-visible',entry.isIntersecting);
+    });
+
+    footerObserver.observe(siteFooter);
+  }
+  
   const footerInfo=document.querySelector('.footer-grid > div');
 
   if(footerInfo){
