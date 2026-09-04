@@ -102,6 +102,17 @@
 
     footerObserver.observe(siteFooter);
   }
+
+  const projectHero=document.querySelector('.project-hero .wrap');
+
+  if(projectHero&&!projectHero.querySelector('.project-home-link')){
+    const homeLink=document.createElement('a');
+    homeLink.className='pill project-home-link';
+    homeLink.href='../index.html#top';
+    homeLink.textContent='← Go Back Home';
+    homeLink.setAttribute('aria-label','Go back to construction portfolio home');
+    projectHero.prepend(homeLink);
+  }
   
   const footerInfo=document.querySelector('.footer-grid > div');
 
